@@ -40,16 +40,18 @@ public class MathExpression implements Expression {
 
     @Override
     public String removeSymbol(@NonNull String expression) {
+        if(expression==null || expression.length()==0) return "";
         expression = read(expression);
-        int START_INDEX = 0;
-        int END_INDEX = expression.length() - 1;
-        return write(expression.substring(START_INDEX, END_INDEX));
+        return write(removeLastCharacter(expression));
     }
 
     @Override
-    public String replaceSymbol(@NonNull String expression, @NonNull String symbol) {
-        expression = removeSymbol(expression);
+    public String replaceSymbol(@NonNull String expression, @NonNull String symbol) throws ExpressionException{
+        if(expression==null) return "";
+        throwsIfSymbolIsInvalid(symbol);
+        expression = removeLastCharacter(expression);
         return write(expression.concat(symbol));
+
     }
 
     @Override
@@ -65,7 +67,14 @@ public class MathExpression implements Expression {
     }
 
     private boolean isSymbolInvalid(String symbol) {
+        if(symbol==null || symbol.length()==0) return true;
         return !symbol.matches("([0-9]|[-+x/]|[.]|[()^fr])");
+    }
+
+    private String removeLastCharacter(@NonNull String expression){
+        int START_INDEX = 0;
+        int END_INDEX = expression.length() - 1;
+        return expression.substring(START_INDEX, END_INDEX);
     }
 
 }
