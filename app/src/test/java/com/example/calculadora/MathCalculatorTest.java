@@ -43,6 +43,7 @@ public class MathCalculatorTest {
         );
     }
 
+
     @Parameters(method = "getParenthesisStartIndexData")
     @Test
     public void getParenthesisStartIndexShouldReturnExpectedExpression( String expression, int expected) {
@@ -74,6 +75,7 @@ public class MathCalculatorTest {
         );
     }
 
+
     @Parameters(method = "getParenthesisEndIndexData")
     @Test
     public void getParenthesisEndIndexShouldReturnExpectedExpression( String expression, int expected) {
@@ -90,6 +92,21 @@ public class MathCalculatorTest {
                 $("(3 + 2)", 7),
                 $("+ 2 )", 5),
                 $("(+ 2))", 5)
+        );
+    }
+
+    @Parameters(method = "setInvalidIndexEndInput")
+    @Test(expected = CalculatorException.class)
+    public void setInvalidIndexEndShouldThrowWhenSymbolIsInvalid(String expression) {
+        calculator.getParenthesisStartIndex(expression);
+    }
+
+    private Object[] setInvalidIndexEndInput() {
+        return $(
+                $(""),
+                $("+2)"),
+                $("12 x 54"),
+                $("r 25")
         );
     }
 
@@ -110,6 +127,22 @@ public class MathCalculatorTest {
         );
     }
 
+    @Parameters(method = "setInvalidRightmostParenthesisInput")
+    @Test(expected = CalculatorException.class)
+    public void setInvalidRightmostParenthesisShouldThrowWhenSymbolIsInvalid(String expression) {
+        calculator.getParenthesisStartIndex(expression);
+    }
+
+    private Object[] setInvalidRightmostParenthesisInput() {
+        return $(
+                $(""),
+                $("+2)"),
+                $("12 x 54"),
+                $("r 25")
+        );
+    }
+
+
     @Parameters(method = "getParenthesisExpressionData")
     @Test
     public void getParenthesisExpressionShouldReturnExpectedExpression( String expression, String expected) {
@@ -127,6 +160,22 @@ public class MathCalculatorTest {
         );
     }
 
+    @Parameters(method = "setInvalidParenthesisExpressionInput")
+    @Test(expected = CalculatorException.class)
+    public void setInvalidParenthesisExpressionShouldThrowWhenSymbolIsInvalid(String expression) {
+        calculator.getParenthesisStartIndex(expression);
+    }
+
+    private Object[] setInvalidParenthesisExpressionInput() {
+        return $(
+                $(""),
+                $("+2)"),
+                $("12 x 54"),
+                $("r 25")
+        );
+    }
+
+
     @Parameters(method = "replaceParenthesisExpressionData")
     @Test
     public void replaceParenthesisExpressionShouldReturnExpectedExpression( String from, String with, String expected) {
@@ -140,5 +189,21 @@ public class MathCalculatorTest {
                 $("2x(1 + 2)", "(3 + 4)","2x(3 + 4)")
         );
     }
+
+    @Parameters(method = "setInvalidReplaceParenthesisExpressionInput")
+    @Test(expected = CalculatorException.class)
+    public void setInvalidreplaceParenthesisExpressionShouldThrowWhenSymbolIsInvalid(String expression) {
+        calculator.getParenthesisStartIndex(expression);
+    }
+
+    private Object[] setInvalidReplaceParenthesisExpressionInput() {
+        return $(
+                $(""),
+                $("+2)"),
+                $("12 x 54"),
+                $("r 25")
+        );
+    }
+
 
 }
