@@ -1,6 +1,7 @@
 package com.example.calculadora;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -62,30 +63,42 @@ public class MathCalculator implements Calculator {
         return resolve(from);
     }
 
-    private boolean containsParenthesis(String expression) {
+    @VisibleForTesting
+    boolean containsParenthesis(String expression) {
         return expression.contains(PARENTHESIS_START);
     }
 
-    private String getParenthesisExpression(String from) {
+    @VisibleForTesting
+    String getParenthesisExpression(String from) {
         return removeParenthesis(getRightmostParenthesis(from));
     }
 
-    private String getRightmostParenthesis(String from) {
+    @VisibleForTesting
+    String getRightmostParenthesis(String from) {
         int START_INDEX = getParenthesisStartIndex(from);
         int END_INDEX = getParenthesisEndIndex(from);
         return from.substring(START_INDEX, END_INDEX);
     }
 
-    private int getParenthesisStartIndex(String from) {
-        return from.lastIndexOf(PARENTHESIS_START);
+    @VisibleForTesting
+    int getParenthesisStartIndex(String from) throws CalculatorException {
+        int index = from.lastIndexOf(PARENTHESIS_START);
+        if(index==-1) throw new CalculatorException("No contains parenthesis start");
+        return index;
     }
 
-    private int getParenthesisEndIndex(String from) {
-        int index = from.indexOf(PARENTHESIS_END, getParenthesisStartIndex( from));
+    @VisibleForTesting
+    int getParenthesisEndIndex(String from) {
+        int index=-1;
+        try {
+            index = from.indexOf(PARENTHESIS_END, getParenthesisStartIndex(from));
+        }
+        catch (CalculatorException e){}
         if (index == -1) {
             return from.length();
         }
         return ++index;
+
     }
 
     private String removeParenthesis(String from) {
@@ -93,11 +106,18 @@ public class MathCalculator implements Calculator {
                 .replace(PARENTHESIS_END, EMPTY_STRING).trim();
     }
 
-    private String replaceParenthesis(String from, String with) {
-        with = addOperators(from, with);
-        return new StringBuilder(from)
-                .replace(getParenthesisStartIndex(from), getParenthesisEndIndex(from), with)
-                .toString();
+    @VisibleForTesting
+    String replaceParenthesis(String from, String with) {
+         try {
+             with = addOperators(from, with);
+             return new StringBuilder(from)
+                    .replace(getParenthesisStartIndex(from), getParenthesisEndIndex(from), with)
+                    .toString();
+        }
+        catch (CalculatorException e){
+            return from;
+        }
+
     }
 
     private String addOperators(String expression, String to) {
