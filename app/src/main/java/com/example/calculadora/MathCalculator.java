@@ -149,7 +149,8 @@ public class MathCalculator implements Calculator {
         return to;
     }
 
-    private String resolve(String from) throws OperationException, ExpressionException {
+    @VisibleForTesting
+    String resolve(String from) throws OperationException, ExpressionException {
         if(from.isEmpty()) return "";
         double result = 0;
         String unaryOperator =NONE;

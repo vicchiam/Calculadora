@@ -3,6 +3,8 @@ package com.example.calculadora;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -10,6 +12,11 @@ import junitparams.Parameters;
 import static com.google.common.truth.Truth.assertThat;
 import static junitparams.JUnitParamsRunner.$;
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by vicch on 11/03/2018.
@@ -19,11 +26,153 @@ import static org.junit.Assert.*;
 public class MathCalculatorTest {
 
     private MathCalculator calculator;
+    @Mock
+    private Expression mockedExpression;
+    @Mock
+    private MathOperation mockedOperation;
 
     @Before
     public void setUp() throws Exception {
-        calculator = new MathCalculator(new MathExpression(), new MathOperation());
+        MockitoAnnotations.initMocks(this);
+        //mockedExpression = Mockito.mock(Expression.class);
+        //mockedOperation = Mockito.mock(MathOperation.class);
+        calculator = new MathCalculator(mockedExpression, mockedOperation);
     }
+
+    //Crear mock
+
+    @Test
+    @Parameters(method = "addSymbolData")
+    public void addSymbolShouldCallAddSymbolInExpression( String to, String symbol) {
+        //Arrange
+        MockExpression mockedExpression = new MockExpression();
+        MathOperation dummyOperation = null;
+        MathCalculator calculator = new MathCalculator(mockedExpression, dummyOperation);
+        //Act
+        calculator.addSymbol(to, symbol);
+        //Assert
+        assertThat(mockedExpression.symbolAdded).isTrue();
+        assertThat(mockedExpression.symbolReplaced).isFalse();
+    }
+
+    private Object[] addSymbolData() {
+        return $(
+                $("", "-"),
+                $("2", "+"),
+                $("5", "."),
+                $("4.3", "f")
+        );
+    }
+
+    @Test
+    @Parameters(method = "replaceSymbolData")
+    public void addSymbolShouldCallReplaceSymbolInExpression( String to, String symbol) {
+        //Arrange
+        MockExpression mockedExpression = new MockExpression();
+        MathOperation dummyOperation = null;
+        MathCalculator calculator = new MathCalculator(mockedExpression, dummyOperation);
+        //Act
+        calculator.addSymbol(to, symbol);
+        //Assert
+        assertThat(mockedExpression.symbolAdded).isFalse();
+        assertThat(mockedExpression.symbolReplaced).isTrue();
+    }
+
+    private Object[] replaceSymbolData() {
+        return $(
+                $("-", "+"),
+                $("-5+", "x"),
+                $("3x4/", "f"),
+                $("3sqrt", "x"),
+                $("3.", "/")
+        );
+    }
+
+    @Test
+    @Parameters(method = "deleteSymbolData")
+    public void deleteSymbolShouldCallReplaceSymbolInExpression( String expression) {
+        //Arrange
+        MockExpression mockedExpression = new MockExpression();
+        MathOperation dummyOperation = null;
+        MathCalculator calculator = new MathCalculator(mockedExpression, dummyOperation);
+        //Act
+        calculator.removeSymbol(expression);
+        //Assert
+        assertThat(mockedExpression.symbolAdded).isFalse();
+        assertThat(mockedExpression.symbolReplaced).isFalse();
+        assertThat(mockedExpression.symbolDeleted).isTrue();
+    }
+
+    private Object[] deleteSymbolData() {
+        return $(
+                $("-"),
+                $("-5+"),
+                $("3x4/"),
+                $("3sqrt"),
+                $("3.")
+        );
+    }
+
+    //Test doble con mokito
+
+    @Test
+    @Parameters(method = "addSymbolData")
+    public void addSymbolShouldCallAddSymbol(String to, String symbol) {
+        calculator.addSymbol(to, symbol);
+        verify(mockedExpression, times(1)).addSymbol(anyString(), anyString());
+        verify(mockedExpression, times(0)).replaceSymbol(anyString(), anyString());
+    }
+
+    @Test
+    @Parameters(method = "replaceSymbolData")
+    public void addSymbolShouldCallReplaceSymbol(String to, String symbol) {
+        calculator.addSymbol(to, symbol);
+        verify(mockedExpression, times(1)).replaceSymbol(anyString(), anyString());
+        verify(mockedExpression, times(0)).addSymbol(anyString(), anyString());
+    }
+
+    @Test
+    @Parameters(method = "resolveData")
+    public void resolveShouldReturnExpectedExpression( String from, String[] tokens, String expected) {
+        MathOperation operation = new MathOperation();
+        MathCalculator calculator = new MathCalculator(mockedExpression, operation);
+        when(mockedExpression.tokenize(from)).thenReturn(tokens);
+        assertThat(calculator.resolve(from)).isEqualTo(expected);
+    }
+
+    private Object[] resolveData() {
+        return $(
+                $("", new String[] {""}, ""),
+                $("-", new String[] {"-"}, "0"),
+                $("-5", new String[] {"-5"}, "-5"),
+                $("3.4", new String[] {"3.4"}, "3.4"),
+                $("3-2", new String[] {"3", "-2"}, "1"),
+                $("3+2", new String[] {"3", "+", "2"}, "5"),
+                $("f3", new String[] {"f", "3"}, "6"),
+                $("2f3", new String[] {"2", "f", "3"}, "12"),
+                $("9/r9", new String[] {"9", "/", "r", "9"}, "3"),
+                $("3^f3", new String[]{"3", "^", "f", "3"}, "729"),
+                $("3--4", new String[] {"3", "-", "-4"}, "7")
+        );
+    }
+
+    @Test
+    @Parameters(method = "resolveAdditionData")
+    public void resolveShouldCallXTimesAdditionMethod( String from, String[] tokens, int times) {
+        when(mockedExpression.tokenize(from)).thenReturn(tokens);
+        calculator.resolve(from);
+        verify(mockedOperation,times(times)).addition(anyDouble(),anyDouble());
+    }
+    private Object[] resolveAdditionData() {
+        return $(
+                $("2+2", new String[] {"2", "+", "2"}, 2),
+                $("", new String[] {""}, 0),
+                $("2", new String[] {"2"}, 1),
+                $("2+2x3-5", new String[] {"2", "+", "2", "x", "3", "-5"},3)
+        );
+    }
+
+    //Test para math calculator
 
     @Parameters(method = "containsParenthesisExpressionData")
     @Test
@@ -204,6 +353,8 @@ public class MathCalculatorTest {
                 $("r 25")
         );
     }
+
+
 
 
 }
