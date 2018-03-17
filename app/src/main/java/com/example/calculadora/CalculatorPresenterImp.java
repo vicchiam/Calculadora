@@ -16,6 +16,8 @@ public class CalculatorPresenterImp implements CalculatorPresenter{
 
     @Override
     public void addSymbol(String expression, String symbol) {
+        throwsIsValidInput(expression);
+        throwsIsValidInput(symbol);
         try {
             view.showOperations(calculator.addSymbol(expression, symbol));
         }
@@ -26,6 +28,7 @@ public class CalculatorPresenterImp implements CalculatorPresenter{
 
     @Override
     public void removeSymbol(String expression) {
+        throwsIsValidInput(expression);
         view.showOperations(calculator.removeSymbol(expression));
     }
 
@@ -36,6 +39,7 @@ public class CalculatorPresenterImp implements CalculatorPresenter{
 
     @Override
     public void calculate(String expression) {
+        throwsIsValidInput(expression);
         if(expression.isEmpty()) {
             view.showResult(expression);
             return;
@@ -46,6 +50,10 @@ public class CalculatorPresenterImp implements CalculatorPresenter{
         catch (RuntimeException exception) {
             view.showError();
         }
+    }
+
+    private void throwsIsValidInput(String param) throws CalculatorPresenterException{
+        if(param==null) throw  new CalculatorPresenterException("No se puede introducir un valor nulo");
     }
 
 }

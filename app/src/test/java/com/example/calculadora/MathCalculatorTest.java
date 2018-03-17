@@ -53,6 +53,7 @@ public class MathCalculatorTest {
         //Assert
         assertThat(mockedExpression.symbolAdded).isTrue();
         assertThat(mockedExpression.symbolReplaced).isFalse();
+        assertThat(mockedExpression.symbolRemove).isFalse();
     }
 
     private Object[] addSymbolData() {
@@ -76,6 +77,7 @@ public class MathCalculatorTest {
         //Assert
         assertThat(mockedExpression.symbolAdded).isFalse();
         assertThat(mockedExpression.symbolReplaced).isTrue();
+        assertThat(mockedExpression.symbolRemove).isFalse();
     }
 
     private Object[] replaceSymbolData() {
@@ -89,8 +91,8 @@ public class MathCalculatorTest {
     }
 
     @Test
-    @Parameters(method = "deleteSymbolData")
-    public void deleteSymbolShouldCallReplaceSymbolInExpression( String expression) {
+    @Parameters(method = "removeSymbolData")
+    public void removeSymbolShouldCallRemoveSymbolInExpression( String expression) {
         //Arrange
         MockExpression mockedExpression = new MockExpression();
         MathOperation dummyOperation = null;
@@ -100,10 +102,10 @@ public class MathCalculatorTest {
         //Assert
         assertThat(mockedExpression.symbolAdded).isFalse();
         assertThat(mockedExpression.symbolReplaced).isFalse();
-        assertThat(mockedExpression.symbolDeleted).isTrue();
+        assertThat(mockedExpression.symbolRemove).isTrue();
     }
 
-    private Object[] deleteSymbolData() {
+    private Object[] removeSymbolData() {
         return $(
                 $("-"),
                 $("-5+"),

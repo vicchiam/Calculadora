@@ -171,18 +171,12 @@ public class MathExpressionTest {
     }
 
     private Object[] tokenizeExpressionData() {
-        String[] empty = {""};
-        String[] r = {"r"};
-        String[] _12={"12"};
-        String[] _1_plus_2={"1","+","2"};
-        String[] sqrt_1_plus_2={"r","(1","+","2)"};
-
         return $(
-                $("",empty),
-                $("r",r),
-                $("12",_12),
-                $("1+2",_1_plus_2),
-                $("r(1+2)",sqrt_1_plus_2)
+                $("",new String[] {""}),
+                $("r",new String[] {"r"}),
+                $("12",new String[] {"12"}),
+                $("1+2",new String[] {"1","+","2"}),
+                $("r(1+2)",new String[] {"r","(1","+","2)"})
         );
     }
 

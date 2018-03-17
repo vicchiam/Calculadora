@@ -10,7 +10,7 @@ public class MockExpression implements Expression {
 
     public boolean symbolAdded = false;
     public boolean symbolReplaced = false;
-    public boolean symbolDeleted = false;
+    public boolean symbolRemove = false;
 
     @Override
     public String read(@NonNull String expression) {
@@ -30,7 +30,7 @@ public class MockExpression implements Expression {
 
     @Override
     public String removeSymbol(@NonNull String expression) {
-        symbolDeleted =  true;
+        symbolRemove =  true;
         return null;
     }
 

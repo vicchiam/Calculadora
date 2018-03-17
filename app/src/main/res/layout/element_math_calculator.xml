@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/first_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        android:weightSum="5">
+
+        <Button
+            android:id="@+id/bt_remove_last"
+            android:layout_weight="1"
+            style="@style/Button.Operator"
+            android:background="@drawable/button_result"
+            android:foreground="@drawable/button_background_transparent"
+            android:text="CE"
+            android:textSize="22sp" />
+
+        <Button
+            android:id="@+id/bt_clear"
+            android:layout_weight="1"
+            style="@style/Button.Operator"
+            android:background="@drawable/button_result"
+            android:foreground="@drawable/button_background_transparent"
+            android:text="C"
+            android:textSize="22sp" />
+
+        <Button
+            android:id="@+id/bt_parenthesis_start"
+            android:layout_weight="1"
+            style="@style/Button"
+            android:tag="(" android:text="(" />
+
+        <Button
+            android:id="@+id/bt_parenthesis_end"
+            android:layout_weight="1"
+            style="@style/Button"
+            android:tag=")"
+            android:text=")" />
+
+        <Button
+            android:id="@+id/bt_division"
+            android:layout_weight="1"
+            style="@style/Button.Operator"
+            android:tag="/"
+            android:text="÷" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/second_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/first_row"
+        android:weightSum="5">
+
+        <Button
+            android:id="@+id/bt7"
+            android:layout_weight="1"
+            style="@style/Button"
+            android:tag="7"
+            android:text="7" />
+
+        <Button
+            android:id="@+id/bt8"
+            android:layout_weight="1"
+            style="@style/Button"
+            android:tag="8"
+            android:text="8" />
+
+        <Button
+            android:id="@+id/bt9"
+            android:layout_weight="1"
+            style="@style/Button"
+            android:tag="9"
+            android:text="9" />
+
+        <Button
+            android:id="@+id/bt_exponentiation"
+            android:layout_weight="1"
+            style="@style/Button.Operator"
+            android:tag="^"
+            android:text="^" />
+
+        <Button
+            android:id="@+id/bt_multiplication"
+            android:layout_weight="1"
+            style="@style/Button.Operator"
+            android:tag="x"
+            android:text="✕" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/third_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/second_row"
+        android:weightSum="5">
+
+        <Button
+            android:id="@+id/bt4"
+            android:layout_weight="1"
+            style="@style/Button"
+            android:tag="4"
+            android:text="4" />
+
+        <Button
+            android:id="@+id/bt5"
+            android:layout_weight="1"
+            style="@style/Button"
+            android:tag="5"
+            android:text="5" />
+
+        <Button
+            android:id="@+id/bt6"
+            android:layout_weight="1"
+            style="@style/Button"
+            android:tag="6"
+            android:text="6" />
+
+        <Button
+            android:id="@+id/bt_square_root"
+            android:layout_weight="1"
+            style="@style/Button.Operator"
+            android:tag="r"
+            android:text="√"/>
+
+        <Button
+            android:id="@+id/bt_subtraction"
+            android:layout_weight="1"
+            style="@style/Button.Operator"
+            android:tag="-"
+            android:text="-" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/four_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/third_row"
+        android:weightSum="5">
+
+        <Button
+            android:id="@+id/bt1"
+            android:layout_weight="1"
+            style="@style/Button"
+            android:tag="1"
+            android:text="1" />
+
+        <Button
+            android:id="@+id/bt2"
+            android:layout_weight="1"
+            style="@style/Button"
+            android:tag="2"
+            android:text="2" />
+
+        <Button
+            android:id="@+id/bt3"
+            android:layout_weight="1"
+            style="@style/Button"
+            android:tag="3"
+            android:text="3" />
+
+        <Button
+            android:id="@+id/bt_factorial"
+            android:layout_weight="1"
+            style="@style/Button.Operator"
+            android:tag="f"
+            android:textAllCaps="false"
+            android:text="n!"/>
+
+        <Button
+            android:id="@+id/bt_addition"
+            android:layout_weight="1"
+            style="@style/Button.Operator"
+            android:tag="+"
+            android:text="+" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/five_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/four_row"
+        android:weightSum="5">
+
+        <Button
+            android:id="@+id/bt0"
+            style="@style/Button"
+            android:layout_weight="1"
+            android:tag="0"
+            android:text="0" />
+
+        <Button
+            android:id="@+id/bt00"
+            android:layout_weight="1"
+            style="@style/Button"
+            android:tag="00"
+            android:text="00" />
+
+        <Button
+            android:id="@+id/bt_dot"
+            android:layout_weight="1"
+            style="@style/Button"
+            android:tag="."
+            android:text="."/>
+
+        <Button
+            android:id="@+id/bt_equal"
+            android:layout_width="112dp"
+            android:layout_weight="2"
+            style="@style/Button.Operator"
+            android:background="@drawable/button_result"
+            android:foreground="@drawable/button_background_transparent"
+            android:text="="/>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
