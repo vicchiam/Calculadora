@@ -52,6 +52,25 @@ public class MainActivityTest {
     @Rule
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class);
 
+    public static ViewAction setText(final String value) {
+        return new ViewAction() {
+            @SuppressWarnings("unchecked")
+
+            @Override
+            public Matcher<View> getConstraints() {
+                return allOf(isDisplayed(), isAssignableFrom(TextView.class));
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                ((TextView) view).setText(value);
+            }
+
+            @Override
+            public String getDescription() { return "replace text"; }
+        };
+    }
+
     @Test
     @Parameters(method = "getValidOperandButtonData")
     public void onClickButtonShouldAddExpectedValueToOperationsViews(int buttonId, String expectedValue) {
@@ -86,25 +105,6 @@ public class MainActivityTest {
                 new Object[]{R.id.bt_parenthesis_end, ") "}};
     }
 
-    public static ViewAction setText(final String value) {
-        return new ViewAction() {
-            @SuppressWarnings("unchecked")
-
-            @Override
-            public Matcher<View> getConstraints() {
-                return allOf(isDisplayed(), isAssignableFrom(TextView.class));
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                ((TextView) view).setText(value);
-            }
-
-            @Override
-            public String getDescription() { return "replace text"; }
-        };
-    }
-
     @Test
     @Parameters(method = "getValidOperationsData")
     public void onOperationsViewChangedShouldUpdateResultsView( String operations, String result) {
@@ -117,8 +117,51 @@ public class MainActivityTest {
                 new Object[]{"2+2", "4"},
                 new Object[]{"sqrt(9)", "3"},
                 new Object[]{"5/2", "2.5"},
-                new Object[] {"3+(4x3)", "15"}
+                new Object[] {"3+(4x3)", "15"},
+                new Object[] {"3+(4x3)-5", "10"},
+                new Object[] {"3-(-4)", "7"}
         };
     }
+
+    @Test
+    @Parameters(method = "getValidButtonCEData")
+    public void onClickButtonCEShouldRemoveLastSymbolToOperationsViews( String operations, String result) {
+        onView(withId(R.id.operations)) .perform(setText(operations));
+        onView(withId(R.id.bt_remove_last)).perform(click());
+        onView(withId(R.id.operations)) .check(matches(withText(result)));
+    }
+
+    private static Object[] getValidButtonCEData() {
+        return new Object[]{
+                new Object[]{"2+2", "2 + "},
+                new Object[]{"sqrt(9)", " sqrt (9"},
+                new Object[]{"5/2", "5 / "},
+                new Object[] {"3+(4x3)", "3 + (4 x 3"},
+                new Object[] {"3+(4x3)-5", "3 + (4 x 3) - "},
+                new Object[] {"3-(-4)", "3 - ( - 4"}
+        };
+    }
+
+    @Test
+    @Parameters(method = "getValidButtonClearData")
+    public void onClickButtonClearShouldRemoveTextToOperationsAndResultViews( String operations, String result) {
+        onView(withId(R.id.operations)) .perform(setText(operations));
+        onView(withId(R.id.bt_clear)).perform(click());
+        onView(withId(R.id.operations)) .check(matches(withText(result)));
+        onView(allOf(withParent(withId(R.id.result)), isCompletelyDisplayed())) .check(matches(withText(result)));
+
+    }
+
+    private static Object[] getValidButtonClearData() {
+        return new Object[]{
+                new Object[]{"2+2", ""},
+                new Object[]{"sqrt(9)", ""},
+                new Object[]{"5/2", ""},
+                new Object[] {"3+(4x3)", ""},
+                new Object[] {"3+(4x3)-5", ""},
+                new Object[] {"3-(-4)", ""}
+        };
+    }
+
 
 }
